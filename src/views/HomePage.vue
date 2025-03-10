@@ -1,30 +1,37 @@
 <template>
   <q-page class="cinema-background">
-    <!-- Topbar mejorado -->
+    <!-- Topbar  -->
     <div class="top-bar">
       <div class="logo-container">
         <q-icon name="movie" size="2rem" color="amber-5" />
-        <h2 class="text-amber-5 q-ml-md">CineFlix</h2>
+        <h3 class="text-amber-5 q-ml-md">CineFlix</h3>
       </div>
-      <search-bar @search="buscarPeliculas" class="search-component" />
+
       <div class="user-actions">
-        <q-btn flat round icon="bookmark" color="amber-5" class="q-mr-sm">
+        <!-- Button for favorites -->
+        <q-btn flat round icon="bookmark" color="amber-5" class="q-mr-s">
           <q-tooltip>Mis Favoritos</q-tooltip>
         </q-btn>
-        <q-btn flat round icon="notifications" color="amber-5" class="q-mr-sm">
+        <!-- Button for notifications -->
+        <q-btn flat round icon="notifications" color="amber-5" class="q-mr-s">
           <q-tooltip>Notificaciones</q-tooltip>
         </q-btn>
+        <!-- Button for profile -->
         <q-btn flat round icon="person" color="amber-5">
           <q-tooltip>Mi Perfil</q-tooltip>
         </q-btn>
       </div>
+
+      <!-- Search bar component -->
+      <search-bar @search="buscarPeliculas" class="search-component" />
     </div>
 
-    <!-- Contenido principal con sidebar -->
+    <!-- Main content with sidebar -->
     <div class="main-content">
-      <!-- Sidebar mejorado -->
+      <!-- Sidebar with navigation items -->
       <div class="sidebar">
         <q-list bordered padding class="rounded-borders text-white">
+          <!-- Navigation items -->
           <q-item clickable v-ripple>
             <q-item-section avatar>
               <q-icon name="home" color="amber-5" />
@@ -55,8 +62,10 @@
 
           <q-separator dark class="q-my-md" />
 
+          <!-- Genre header -->
           <q-item-label header class="text-amber-5">Géneros</q-item-label>
 
+          <!-- Genre items -->
           <q-item clickable v-ripple>
             <q-item-section avatar>
               <q-icon name="videogame_asset" color="amber-5" />
@@ -87,18 +96,19 @@
         </q-list>
       </div>
 
-      <!-- Área principal de películas -->
+      <!-- Main movie area -->
       <div class="movies-container">
+        <!-- Loading spinner -->
         <loading-spinner v-if="loading" />
 
         <div v-else>
-          <!-- Categoría destacada -->
+          <!-- Featured category -->
           <div class="section-heading">
             <h2 class="text-amber-5"><q-icon name="star" class="q-mr-sm" />Películas destacadas</h2>
             <q-btn flat color="amber-5" label="Ver todas" icon-right="arrow_forward" />
           </div>
 
-          <!-- Grid de películas mejorado -->
+          <!-- Movie grid -->
           <div class="movies-grid">
             <movie-card
               v-for="movie in movies"
@@ -109,7 +119,7 @@
           </div>
         </div>
 
-        <!-- Mensaje de error -->
+        <!-- Error message -->
         <div v-if="error" class="error-message">
           <q-icon name="error" size="2rem" color="negative" />
           <p>{{ error }}</p>
@@ -117,7 +127,7 @@
       </div>
     </div>
 
-    <!-- Popup de detalles mejorado -->
+    <!-- Movie details popup -->
     <q-dialog v-model="showPopup" maximized transition-show="slide-up" transition-hide="slide-down">
       <q-card class="movie-detail-popup">
         <q-card-section class="popup-header">
@@ -131,12 +141,15 @@
           <div class="popup-poster">
             <img :src="getMoviePosterUrl(selectedMovie)" alt="Movie poster" class="popup-img" />
             <div class="movie-actions">
+              <!-- Favorite button -->
               <q-btn flat round color="amber-5" icon="bookmark">
                 <q-tooltip>Añadir a favoritos</q-tooltip>
               </q-btn>
+              <!-- Share button -->
               <q-btn flat round color="amber-5" icon="share">
                 <q-tooltip>Compartir</q-tooltip>
               </q-btn>
+              <!-- Rate button -->
               <q-btn flat round color="amber-5" icon="star">
                 <q-tooltip>Calificar</q-tooltip>
               </q-btn>
@@ -145,13 +158,16 @@
 
           <div class="popup-info">
             <div class="movie-meta">
+              <!-- Movie rating -->
               <span class="rating"
                 ><q-icon name="star" color="amber-5" /> {{ selectedMovie.vote_average }}/10</span
               >
+              <!-- Movie release date -->
               <span class="year"
                 ><q-icon name="event" color="amber-5" />
                 {{ formatDate(selectedMovie.release_date) }}</span
               >
+              <!-- Movie vote count -->
               <span class="votes"
                 ><q-icon name="how_to_vote" color="amber-5" />
                 {{ selectedMovie.vote_count }} votos</span
@@ -206,12 +222,14 @@ import MovieCard from 'src/components/MovieCard.vue'
 import SearchBar from 'src/components/SearchBar.vue'
 import LoadingSpinner from 'src/components/LoadingSpinner.vue'
 
+// Reactive references for movies, loading state, error message, popup visibility, and selected movie
 const movies = ref([])
 const loading = ref(false)
 const error = ref(null)
 const showPopup = ref(false)
 const selectedMovie = ref({})
 
+// Function to load top-rated movies
 const cargarPeliculas = async () => {
   loading.value = true
   error.value = null
@@ -226,6 +244,7 @@ const cargarPeliculas = async () => {
   }
 }
 
+// Function to search for movies based on a query
 const buscarPeliculas = async (query) => {
   if (!query) return cargarPeliculas()
   loading.value = true
@@ -240,28 +259,32 @@ const buscarPeliculas = async (query) => {
   }
 }
 
+// Function to view movie details in a popup
 const verDetalles = (movie) => {
   selectedMovie.value = movie
   showPopup.value = true
 }
 
+// Function to get the movie poster URL
 const getMoviePosterUrl = (movie) => {
   return movie.poster_path
     ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
     : 'https://via.placeholder.com/500x750?text=No+Image'
 }
 
+// Function to format the movie release date
 const formatDate = (dateString) => {
   if (!dateString) return 'Fecha desconocida'
   const date = new Date(dateString)
   return date.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })
 }
 
+// Load top-rated movies when the component is mounted
 onMounted(cargarPeliculas)
 </script>
 
 <style scoped>
-/* Estilos generales */
+/* General styles */
 .cinema-background {
   background: linear-gradient(135deg, #111111 0%, #333333 100%);
   min-height: 100vh;
@@ -296,7 +319,7 @@ onMounted(cargarPeliculas)
   display: flex;
 }
 
-/* Contenido principal */
+/* Main content */
 .main-content {
   display: flex;
   gap: 20px;
@@ -316,7 +339,7 @@ onMounted(cargarPeliculas)
   top: 85px;
 }
 
-/* Contenedor de películas */
+/* Movie container */
 .movies-container {
   flex: 1;
   min-height: 500px;
@@ -329,7 +352,7 @@ onMounted(cargarPeliculas)
   margin-bottom: 20px;
 }
 
-/* Grid de películas */
+/* Movie grid */
 .movies-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -354,7 +377,7 @@ onMounted(cargarPeliculas)
   }
 }
 
-/* Popup de detalles */
+/* Movie detail popup */
 .movie-detail-popup {
   background: linear-gradient(to bottom, #1a1a1a, #2c2c2c);
   color: white;
@@ -468,7 +491,7 @@ onMounted(cargarPeliculas)
   }
 }
 
-/* Cargador y mensaje de error */
+/* Loader and error message */
 .error-message {
   display: flex;
   flex-direction: column;
@@ -477,5 +500,107 @@ onMounted(cargarPeliculas)
   background: rgba(0, 0, 0, 0.3);
   border-radius: 12px;
   margin-top: 40px;
+}
+
+/* Additional styles for responsive design */
+.cinema-background {
+  background: linear-gradient(135deg, #111111 0%, #333333 100%);
+  min-height: 100vh;
+  color: #f5f5f5;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  width: 100%;
+}
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 25px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 193, 7, 0.2);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 767px) {
+  .top-bar {
+    padding: 10px 15px;
+    flex-wrap: wrap;
+    row-gap: 10px;
+  }
+
+  .logo-container {
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .search-component {
+    flex: 1 0 100%;
+    order: 3;
+    margin-top: 5px;
+  }
+
+  .user-actions {
+    display: flex;
+    justify-content: flex-end;
+    flex: 1;
+  }
+
+  .main-content {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .sidebar {
+    width: 100%;
+    position: static;
+    margin-bottom: 20px;
+  }
+
+  .movies-grid {
+    grid-template-columns: repeat(1, 1fr);
+    gap: 15px;
+  }
+
+  .popup-content {
+    flex-direction: column;
+    padding: 15px;
+  }
+
+  .popup-poster {
+    flex: 0 0 auto;
+    margin-bottom: 20px;
+  }
+
+  .additional-info {
+    flex-direction: column;
+  }
+}
+
+.main-content {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.movies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 25px;
+  margin-bottom: 40px;
+  width: 100%;
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .movies-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 </style>

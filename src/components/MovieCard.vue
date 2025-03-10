@@ -1,11 +1,11 @@
 <template>
   <div ref="cardRef" class="movie-card-wrapper">
     <q-card class="movie-card">
-      <!-- Poster de la película con overlay de información al hover -->
+      <!-- Movie poster with overlay information on hover -->
       <div class="poster-container">
         <q-img :src="imageUrl" :ratio="3 / 3" spinner-color="amber-5" class="movie-poster" />
 
-        <!-- Overlay informativo -->
+        <!-- Informative overlay -->
         <div class="movie-overlay">
           <div class="movie-actions">
             <q-btn round flat size="sm" icon="bookmark_add" color="amber-5">
@@ -28,7 +28,7 @@
         </div>
       </div>
 
-      <!-- Información básica de la película -->
+      <!-- Basic movie information -->
       <q-card-section class="movie-info">
         <div class="movie-rating">
           <q-icon name="star" color="amber-5" size="sm" />
@@ -42,7 +42,7 @@
         </p>
       </q-card-section>
 
-      <!-- Botón de acción -->
+      <!-- Action button -->
       <q-card-actions align="right" class="card-actions">
         <q-btn
           color="amber-5"
@@ -59,7 +59,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 
-// Lista de géneros (idealmente debería venir de una API)
+// List of genres (ideally should come from an API)
 const genres = {
   28: 'Acción',
   12: 'Aventura',
@@ -82,6 +82,7 @@ const genres = {
   37: 'Western',
 }
 
+// Define component props
 const props = defineProps({
   movie: {
     type: Object,
@@ -89,20 +90,24 @@ const props = defineProps({
   },
 })
 
+// Reference to the card element
 const cardRef = ref(null)
 
+// Computed property for the image URL
 const imageUrl = computed(() => {
   return props.movie.poster_path
     ? `https://image.tmdb.org/t/p/w300${props.movie.poster_path}`
     : 'https://via.placeholder.com/300x450?text=No+Image'
 })
 
+// Function to format the release date
 const formatDate = (dateString) => {
   if (!dateString) return 'Fecha desconocida'
   const date = new Date(dateString)
   return date.toLocaleDateString('es-ES', { year: 'numeric' })
 }
 
+// Function to get genre names from genre IDs
 const getGenreNames = (genreIds) => {
   if (!genreIds || !genreIds.length) return 'Sin géneros'
   return genreIds
@@ -112,8 +117,8 @@ const getGenreNames = (genreIds) => {
     .join(', ')
 }
 
+// Lifecycle hook to add entry animation to the card
 onMounted(() => {
-  // Animación de entrada para las tarjetas
   const card = cardRef.value
   if (card) {
     card.style.opacity = '0'
@@ -126,7 +131,7 @@ onMounted(() => {
         card.style.transform = 'translateY(0)'
       },
       100 * Math.random() * 5,
-    ) // Efecto escalonado
+    ) // Staggered effect
   }
 })
 </script>
@@ -135,7 +140,7 @@ onMounted(() => {
 .movie-card-wrapper {
   height: 100%;
   perspective: 1000px;
-  max-width: 400px;
+  max-width: 300px;
   margin: 0 auto;
 }
 
@@ -252,7 +257,7 @@ onMounted(() => {
   border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* Utilidades para texto con elipsis */
+/* Utilities for text ellipsis */
 .ellipsis-2-lines {
   display: -webkit-box;
   -webkit-line-clamp: 2;

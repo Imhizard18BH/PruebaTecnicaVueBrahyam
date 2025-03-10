@@ -14,10 +14,12 @@
       @focus="focusSearch"
       @blur="blurSearch"
     >
+      <!-- Icono de búsqueda al inicio del input -->
       <template v-slot:prepend>
         <q-icon name="search" color="amber-5" />
       </template>
 
+      <!-- Botones de limpiar y filtros avanzados al final del input -->
       <template v-slot:append>
         <q-btn v-if="query" round flat icon="clear" color="grey-5" @click="clearSearch" size="sm" />
         <q-btn round flat icon="tune" color="amber-5" size="sm">
@@ -25,6 +27,7 @@
         </q-btn>
       </template>
 
+      <!-- Botón de buscar después del input -->
       <template v-slot:after>
         <q-btn
           color="amber-5"
@@ -62,6 +65,7 @@
 <script setup>
 import { ref, watch } from 'vue'
 
+// Define props
 const props = defineProps({
   initialValue: {
     type: String,
@@ -69,13 +73,15 @@ const props = defineProps({
   },
 })
 
+// Define emit events
 const emit = defineEmits(['search'])
 
+// Reactive variables
 const query = ref(props.initialValue)
 const isFocused = ref(false)
 const suggestions = ref([])
 
-// Sugerencias de ejemplo (en una aplicación real, vendrían de la API)
+// Mock suggestions (in a real application, these would come from an API)
 const mockSuggestions = [
   { text: 'Películas de acción', type: 'genre' },
   { text: 'Clásicos del cine', type: 'category' },
@@ -84,47 +90,54 @@ const mockSuggestions = [
   { text: 'Películas premiadas', type: 'category' },
 ]
 
+// Focus event handler
 const focusSearch = () => {
   isFocused.value = true
   updateSuggestions()
 }
 
+// Blur event handler
 const blurSearch = () => {
-  // Retrasamos para permitir clics en sugerencias
+  // Delay to allow clicks on suggestions
   setTimeout(() => {
     isFocused.value = false
   }, 200)
 }
 
+// Clear search input
 const clearSearch = () => {
   query.value = ''
   suggestions.value = []
   emit('search', '')
 }
 
+// Emit search event
 const emitSearch = () => {
   emit('search', query.value)
   isFocused.value = false
 }
 
+// Select suggestion
 const selectSuggestion = (suggestion) => {
   query.value = suggestion.text
   emit('search', suggestion.text)
   isFocused.value = false
 }
 
+// Update suggestions based on query
 const updateSuggestions = () => {
   if (!query.value) {
     suggestions.value = mockSuggestions.slice(0, 4)
     return
   }
 
-  // Filtrar sugerencias basadas en la consulta
+  // Filter suggestions based on query
   suggestions.value = mockSuggestions
     .filter((s) => s.text.toLowerCase().includes(query.value.toLowerCase()))
     .slice(0, 5)
 }
 
+// Get icon for suggestion type
 const getSuggestionIcon = (type) => {
   switch (type) {
     case 'genre':
@@ -140,7 +153,7 @@ const getSuggestionIcon = (type) => {
   }
 }
 
-// Actualizar sugerencias cuando cambia la consulta
+// Watch query changes to update suggestions
 watch(query, updateSuggestions)
 </script>
 
@@ -163,7 +176,7 @@ watch(query, updateSuggestions)
   height: 40px;
 }
 
-/* Mejorar visibilidad del texto */
+/* Improve text visibility */
 .search-input :deep(.q-field__native),
 .search-input :deep(.q-field__input) {
   color: white !important;
@@ -198,5 +211,16 @@ watch(query, updateSuggestions)
 
 .search-suggestions :deep(.q-item:hover) {
   background: rgba(255, 193, 7, 0.1);
+}
+
+/* Responsive adjustments for search component */
+@media (max-width: 767px) {
+  .search-input :deep(.q-field__after) {
+    display: none; /* Hide the "Buscar" button on mobile to save space */
+  }
+
+  .search-input :deep(.q-field__append) {
+    padding-right: 8px; /* Adjust space for right-side buttons */
+  }
 }
 </style>
