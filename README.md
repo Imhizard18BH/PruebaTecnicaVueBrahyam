@@ -1,40 +1,68 @@
-# MovieApp (pruebatecnicavuebrahyam)
+# 🎬 Proyecto de Películas con Vue.js y Quasar
 
-Is  a technical interview in Vue where u use TMDb\u0017 API
+![Vue.js](https://img.shields.io/badge/Vue.js-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white) ![Quasar](https://img.shields.io/badge/Quasar-1976D2?style=for-the-badge&logo=quasar&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 
-## Install the dependencies
+Este proyecto es una aplicación web desarrollada con **Vue.js** y **Quasar Framework** que consume una API de películas y muestra información detallada de cada una.
+
+---
+
+## 🚀 Características
+
+- 📽️ Lista de películas con imágenes y descripciones.
+- 🔍 Barra de búsqueda para filtrar películas.
+- 🌙 Modo oscuro activado por defecto.
+- 🎨 Diseño moderno y responsivo con **Quasar**.
+
+---
+
+## 📦 Instalación
+
+### 1️⃣ Clonar el repositorio
+
 ```bash
-yarn
-# or
-npm install
+git clone https://github.com/tu-usuario/proyecto-peliculas.git
+cd proyecto-peliculas
 ```
 
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
+### 2️⃣ Instalar dependencias
+
 ```bash
-quasar dev
+yarn install # O npm install
 ```
 
+### 3️⃣ Configurar variables de entorno
 
-### Lint the files
-```bash
-yarn lint
-# or
-npm run lint
+Debes crear un archivo `.env.local` en la raíz del proyecto para configurar la API:
+
+```ini
+VITE_API_BASE_URL=https://api.example.com/movies
+VITE_API_KEY=tu-clave-api
 ```
 
+**Explicación:**
 
-### Format the files
+- `VITE_API_BASE_URL` 🠆 URL base de la API.
+- `VITE_API_KEY` 🠆 Clave de acceso a la API.
+
+### 4️⃣ Ejecutar el proyecto
+
 ```bash
-yarn format
-# or
-npm run format
+yarn dev # O npm run dev
 ```
 
+---
 
-### Build the app for production
-```bash
-quasar build
-```
+## 🛠️ Tecnologías usadas
 
-### Customize the configuration
-See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).
+- **Vue.js 3** - Framework de JavaScript progresivo.
+- **Quasar Framework** - UI Framework basado en Vue.js.
+- **Axios** - Para realizar peticiones HTTP.
+- **Vite** - Herramienta de build para proyectos Vue.js.
+
+---
+
+## 📜 Licencia
+
+Este proyecto está bajo la licencia MIT.
+
+¡Disfruta del código y colabora con mejoras! 🚀
